@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -34,10 +35,10 @@ func main() {
 	router := gin.Default()
 
 	router.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{"message": "Hello, World!"})
+		c.JSON(http.StatusOK, gin.H{"message": "Hello, World!"})
 	})
 	router.GET("/tasks", func(c *gin.Context) {
-		c.JSON(200, tasks)
+		c.JSON(http.StatusOK, tasks)
 	})
 	router.GET("/tasks/:id", func(c *gin.Context) {
 		id := c.Param("id")
@@ -49,7 +50,7 @@ func main() {
 					DueDate:     task.DueDate,
 					Status:      task.Status,
 				}
-				c.JSON(200, resp)
+				c.JSON(http.StatusOK, resp)
 				return
 			}
 		}
@@ -72,11 +73,11 @@ func main() {
 				tasks[i].Description = updatedTask.Description
 				tasks[i].DueDate = updatedTask.DueDate
 				tasks[i].Status = updatedTask.Status
-				c.JSON(200, gin.H{"message": "Task updated successfully"})
+				c.JSON(http.StatusOK, gin.H{"message": "Task updated successfully"})
 				return
 			}
 		}
-		c.JSON(404, gin.H{"message": "Task not found"})
+		c.JSON(http.StatusNotFound, gin.H{"message": "Task not found"})
 	})
 
 	router.Run(":8080")
